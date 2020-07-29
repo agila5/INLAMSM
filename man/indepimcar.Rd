@@ -57,134 +57,152 @@ of diseases.
 
 \donttest{
 if (require("INLA", quietly = TRUE)) {
-require(spdep)
-require(spData)
-require(rgdal)
+  require(spdep)
+  require(spData)
+  require(rgdal)
 
-## Independent IMCAR model with 2 diseases
+  ## Independent IMCAR model with 2 diseases
 
-#Load SIDS data
-nc.sids <- readOGR(system.file("shapes/sids.shp", package="spData")[1])
-proj4string(nc.sids) <- CRS("+proj=longlat +ellps=clrk66")
+  # Load SIDS data
+  nc.sids <- readOGR(system.file("shapes/sids.shp", package = "spData")[1])
+  proj4string(nc.sids) <- CRS("+proj=longlat +ellps=clrk66")
 
-#Compute adjacency matrix, as nb object 'adj' and sparse matrix 'W'
-adj <- poly2nb(nc.sids)
-W <- as(nb2mat(adj, style = "B"), "Matrix")
+  # Compute adjacency matrix, as nb object 'adj' and sparse matrix 'W'
+  adj <- poly2nb(nc.sids)
+  W <- as(nb2mat(adj, style = "B"), "Matrix")
 
-#Compute expected cases
-r74 <- sum(nc.sids$SID74) / sum(nc.sids$BIR74)
-nc.sids$EXP74 <- r74 * nc.sids$BIR74
-nc.sids$SMR74 <- nc.sids$SID74 / nc.sids$EXP74
-nc.sids$NWPROP74 <- nc.sids$NWBIR74 / nc.sids$BIR74
+  # Compute expected cases
+  r74 <- sum(nc.sids$SID74) / sum(nc.sids$BIR74)
+  nc.sids$EXP74 <- r74 * nc.sids$BIR74
+  nc.sids$SMR74 <- nc.sids$SID74 / nc.sids$EXP74
+  nc.sids$NWPROP74 <- nc.sids$NWBIR74 / nc.sids$BIR74
 
-r79 <- sum(nc.sids$SID79) / sum(nc.sids$BIR79)
-nc.sids$EXP79 <- r79 * nc.sids$BIR79
-nc.sids$SMR79 <- nc.sids$SID79 / nc.sids$EXP79
-nc.sids$NWPROP79 <- nc.sids$NWBIR79 / nc.sids$BIR79
+  r79 <- sum(nc.sids$SID79) / sum(nc.sids$BIR79)
+  nc.sids$EXP79 <- r79 * nc.sids$BIR79
+  nc.sids$SMR79 <- nc.sids$SID79 / nc.sids$EXP79
+  nc.sids$NWPROP79 <- nc.sids$NWBIR79 / nc.sids$BIR79
 
-# Data (replicated to assess scalability)
+  # Data (replicated to assess scalability)
 
-#Real data
-n.rep <- 1
-d <- list(OBS = c(nc.sids$SID74, nc.sids$SID79),
-         NWPROP = c(nc.sids$NWPROP74, nc.sids$NWPROP79),
-         EXP = c(nc.sids$EXP74, nc.sids$EXP79))
-d <- lapply(d, function(X) { rep(X, n.rep)})
-d$idx <- 1:length(d$OBS)
+  # Real data
+  n.rep <- 1
+  d <- list(
+    OBS = c(nc.sids$SID74, nc.sids$SID79),
+    NWPROP = c(nc.sids$NWPROP74, nc.sids$NWPROP79),
+    EXP = c(nc.sids$EXP74, nc.sids$EXP79)
+  )
+  d <- lapply(d, function(X) {
+    rep(X, n.rep)
+  })
+  d$idx <- 1:length(d$OBS)
 
-# Model parameters: k and W
-k <- 2 * n.rep #Number of diseases
+  # Model parameters: k and W
+  k <- 2 * n.rep # Number of diseases
 
-#Define independent IMCAR model
-model <- inla.rgeneric.define(inla.rgeneric.indep.IMCAR.model, debug = TRUE,
-                             k = k,
-                             W = W)
+  # Define independent IMCAR model
+  model <- inla.rgeneric.define(inla.rgeneric.indep.IMCAR.model,
+    debug = TRUE,
+    k = k,
+    W = W
+  )
 
-# Matrices for sum-to-zero constraints
-A <- kronecker(Diagonal(k, 1), Matrix(1, ncol = nrow(W), nrow = 1))
-e  = rep(0, k)
+  # Matrices for sum-to-zero constraints
+  A <- kronecker(Diagonal(k, 1), Matrix(1, ncol = nrow(W), nrow = 1))
+  e <- rep(0, k)
 
-#Fit multivariate model
-r <- inla(OBS ~ 1 + f(idx, model = model,
-      extraconstr = list(A = as.matrix(A), e = e)), # + NWPROP,
-         data = d, E = EXP, family = "poisson",
-         control.predictor = list(compute = TRUE))
+  # Fit multivariate model
+  r <- inla(OBS ~ 1 + f(idx,
+    model = model,
+    extraconstr = list(A = as.matrix(A), e = e)
+  ), # + NWPROP,
+  data = d, E = EXP, family = "poisson",
+  control.predictor = list(compute = TRUE)
+  )
 
-summary(r)
+  summary(r)
 
-# Transformed parameters
-r.hyperpar <- inla.MCAR.transform(r, k = 2, model = "INDIMCAR")
-r.hyperpar$summary.hyperpar
+  # Transformed parameters
+  r.hyperpar <- inla.MCAR.transform(r, k = 2, model = "INDIMCAR")
+  r.hyperpar$summary.hyperpar
 
-#Get fitted data, i.e., relative risk
-nc.sids$FITTED74 <- r$summary.fitted.values[1:100, "mean"]
-nc.sids$FITTED79 <- r$summary.fitted.values[100 + 1:100, "mean"]
+  # Get fitted data, i.e., relative risk
+  nc.sids$FITTED74 <- r$summary.fitted.values[1:100, "mean"]
+  nc.sids$FITTED79 <- r$summary.fitted.values[100 + 1:100, "mean"]
 
-#Display fitted relative risks
-dev.new()
-spplot(nc.sids, c("SMR74", "FITTED74", "SMR79", "FITTED79"))
+  # Display fitted relative risks
+  dev.new()
+  spplot(nc.sids, c("SMR74", "FITTED74", "SMR79", "FITTED79"))
 
-#Show marginals of tau_1, tau_2, alpha
+  # Show marginals of tau_1, tau_2, alpha
 
-marg.tau1 <- inla.tmarginal(
- function(x) exp(x),
- r$marginals.hyperpar[[1]])
+  marg.tau1 <- inla.tmarginal(
+    function(x) exp(x),
+    r$marginals.hyperpar[[1]]
+  )
 
-marg.tau2 <- inla.tmarginal(
- function(x) exp(x),
- r$marginals.hyperpar[[2]])
+  marg.tau2 <- inla.tmarginal(
+    function(x) exp(x),
+    r$marginals.hyperpar[[2]]
+  )
 
-oldpar <- par(mfrow = c(2, 1))
-plot(marg.tau1, main = "tau1", type = "l")
-plot(marg.tau2, main = "tau2", type = "l")
+  oldpar <- par(mfrow = c(2, 1))
+  plot(marg.tau1, main = "tau1", type = "l")
+  plot(marg.tau2, main = "tau2", type = "l")
 
-par(oldpar)
+  par(oldpar)
 
-## Running UNIVARIATE MODEL
+  ## Running UNIVARIATE MODEL
 
-#Real data
-d.uni <- list(OBS = nc.sids$SID74,
-             NWPROP = nc.sids$NWPROP74,
-             EXP = nc.sids$EXP74)
-d.uni$idx <- 1:length(d.uni$OBS)
+  # Real data
+  d.uni <- list(
+    OBS = nc.sids$SID74,
+    NWPROP = nc.sids$NWPROP74,
+    EXP = nc.sids$EXP74
+  )
+  d.uni$idx <- 1:length(d.uni$OBS)
 
-#Fit model
-r.uni <- inla(OBS ~ 1 + f(idx, model = "besag", graph = W),
-             data = d.uni, E = EXP, family = "poisson",
-             control.predictor = list(compute = TRUE))
+  # Fit model
+  r.uni <- inla(OBS ~ 1 + f(idx, model = "besag", graph = W),
+    data = d.uni, E = EXP, family = "poisson",
+    control.predictor = list(compute = TRUE)
+  )
 
-summary(r.uni)
+  summary(r.uni)
 
-nc.sids$FITTED74.uni <- r.uni$summary.fitted.values[ , "mean"]
+  nc.sids$FITTED74.uni <- r.uni$summary.fitted.values[, "mean"]
 
-#Display univariate VS multivariate fitted relative risks.
+  # Display univariate VS multivariate fitted relative risks.
 
-spplot(nc.sids, c("FITTED74", "FITTED74.uni"),
-      main=list(label="Relative risk estimation",cex=2))
+  spplot(nc.sids, c("FITTED74", "FITTED74.uni"),
+    main = list(label = "Relative risk estimation", cex = 2)
+  )
 
-plot(nc.sids$FITTED74.uni, nc.sids$FITTED74, main="Relative Risk estimations",
-    xlab="Univariate RR estimations"
-    , ylab="Multivariate RR estimations", xlim=c(0.5, 2.5), ylim=c(0.5, 2.5))
-abline(h=0, col="grey")
-abline(v=0, col="grey")
-abline(a=0, b=1, col="red")
+  plot(nc.sids$FITTED74.uni, nc.sids$FITTED74,
+    main = "Relative Risk estimations",
+    xlab = "Univariate RR estimations",
+    ylab = "Multivariate RR estimations", xlim = c(0.5, 2.5), ylim = c(0.5, 2.5)
+  )
+  abline(h = 0, col = "grey")
+  abline(v = 0, col = "grey")
+  abline(a = 0, b = 1, col = "red")
 
 
-#Plot posterior mean of the spatial effects univ VS multi
+  # Plot posterior mean of the spatial effects univ VS multi
 
-nc.sids$m.uni <- r.uni$summary.random$idx[, "mean"]
-nc.sids$m.mult <- r$summary.random$idx[1:100, "mean"]
+  nc.sids$m.uni <- r.uni$summary.random$idx[, "mean"]
+  nc.sids$m.mult <- r$summary.random$idx[1:100, "mean"]
 
-plot(nc.sids$m.uni, nc.sids$m.mult,
-    main="Posterior mean of the spatial effect", xlab="Uni. post. means"
-    , ylab="Mult. post. means", xlim=c(-1,1), ylim=c(-1,1))
-abline(h=0, col="grey")
-abline(v=0, col="grey")
-abline(a=0, b=1, col="red")
+  plot(nc.sids$m.uni, nc.sids$m.mult,
+    main = "Posterior mean of the spatial effect", xlab = "Uni. post. means",
+    ylab = "Mult. post. means", xlim = c(-1, 1), ylim = c(-1, 1)
+  )
+  abline(h = 0, col = "grey")
+  abline(v = 0, col = "grey")
+  abline(a = 0, b = 1, col = "red")
 
-spplot(nc.sids, c("m.mult", "m.uni"),
-      main=list(label="Post. mean spatial effect",cex=2))
-
+  spplot(nc.sids, c("m.mult", "m.uni"),
+    main = list(label = "Post. mean spatial effect", cex = 2)
+  )
 }
 }
 }

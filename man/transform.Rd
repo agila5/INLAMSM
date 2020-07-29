@@ -22,12 +22,12 @@ inla.MCAR.transform(obj, k, model = "IMCAR", alpha.min, alpha.max)
 This function returns a list with the following elements:
 \itemize{
 
-  \item \code{marginals.hyperpar} List with the posterior marginals of 
+  \item \code{marginals.hyperpar} List with the posterior marginals of
   transformed hyperparameters.
 
   \item \emph{summary.hyperpar} Summary of the posterior marginals.
 
-  \item \emph{VAR.p} Variance matrix of between-variables variability 
+  \item \emph{VAR.p} Variance matrix of between-variables variability
   computed using point estimates from the posterior marginals.
 
  \item \emph{VAR.m} Posterior mean of variance matrix of the between-variables
@@ -39,7 +39,7 @@ This function returns a list with the following elements:
 
  \item \emph{M.p} M matrix (only in the M-model) obtained using point
  estimates of the parameters.
- 
+
  \item \emph{M.m} M matrix (only in the M-model) obtained using the
  the internal representation of the posterior joint distribution of
  the hyperparameters.

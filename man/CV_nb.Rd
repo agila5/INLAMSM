@@ -12,7 +12,7 @@ Comunidad Valenciana (Spain) to be used for the spatial models.
 The original data set is supplied as supplementary material of the
 book: "Martinez-Beneito, M A & Botella Rocamora, P. Disease mapping: from
 foundations to multidimensional modeling. CRC/Chapman & Hall, 2019". This
-object has been built from several of the files available at the 
+object has been built from several of the files available at the
 supplementary material repository of the book at:
 \url{https://github.com/MigueBeneito/DisMapBook/tree/master/Data}
 }
@@ -27,10 +27,9 @@ require(spdep)
 data(CV)
 plot(CV)
 plot(CV.nb, coordinates(CV), pch = ".", col = "gray", add = TRUE)
-
 }
 \references{
-Martinez-Beneito, M A & Botella Rocamora, P. Disease mapping: 
+Martinez-Beneito, M A & Botella Rocamora, P. Disease mapping:
 from foundations to multidimensional modeling. CRC/Chapman & Hall, 2019.
 }
 \seealso{

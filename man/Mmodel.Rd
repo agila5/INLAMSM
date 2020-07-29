@@ -65,96 +65,111 @@ M matrix (considered all as a random effects).
 
 \donttest{
 if (require("INLA", quietly = TRUE)) {
-require(spdep)
-require(spData)
-require(rgdal)
+  require(spdep)
+  require(spData)
+  require(rgdal)
 
-#Load SIDS data
-nc.sids <- readOGR(system.file("shapes/sids.shp", package="spData")[1])
-proj4string(nc.sids) <- CRS("+proj=longlat +ellps=clrk66")
+  # Load SIDS data
+  nc.sids <- readOGR(system.file("shapes/sids.shp", package = "spData")[1])
+  proj4string(nc.sids) <- CRS("+proj=longlat +ellps=clrk66")
 
-#Compute adjacency matrix, as nb object 'adj' and sparse matrix 'W'
-adj <- poly2nb(nc.sids)
-W <- as(nb2mat(adj, style = "B"), "Matrix")
+  # Compute adjacency matrix, as nb object 'adj' and sparse matrix 'W'
+  adj <- poly2nb(nc.sids)
+  W <- as(nb2mat(adj, style = "B"), "Matrix")
 
-#Compute expected cases
-r74 <- sum(nc.sids$SID74) / sum(nc.sids$BIR74)
-nc.sids$EXP74 <- r74 * nc.sids$BIR74
-nc.sids$SMR74 <- nc.sids$SID74 / nc.sids$EXP74
-nc.sids$NWPROP74 <- nc.sids$NWBIR74 / nc.sids$BIR74
+  # Compute expected cases
+  r74 <- sum(nc.sids$SID74) / sum(nc.sids$BIR74)
+  nc.sids$EXP74 <- r74 * nc.sids$BIR74
+  nc.sids$SMR74 <- nc.sids$SID74 / nc.sids$EXP74
+  nc.sids$NWPROP74 <- nc.sids$NWBIR74 / nc.sids$BIR74
 
-r79 <- sum(nc.sids$SID79) / sum(nc.sids$BIR79)
-nc.sids$EXP79 <- r79 * nc.sids$BIR79
-nc.sids$SMR79 <- nc.sids$SID79 / nc.sids$EXP79
-nc.sids$NWPROP79 <- nc.sids$NWBIR79 / nc.sids$BIR79
+  r79 <- sum(nc.sids$SID79) / sum(nc.sids$BIR79)
+  nc.sids$EXP79 <- r79 * nc.sids$BIR79
+  nc.sids$SMR79 <- nc.sids$SID79 / nc.sids$EXP79
+  nc.sids$NWPROP79 <- nc.sids$NWBIR79 / nc.sids$BIR79
 
-# Data (replicated to assess scalability)
+  # Data (replicated to assess scalability)
 
-#Real data
-n.rep <- 1
-d <- list(OBS = c(nc.sids$SID74, nc.sids$SID79),
-          NWPROP = c(nc.sids$NWPROP74, nc.sids$NWPROP79),
-          EXP = c(nc.sids$EXP74, nc.sids$EXP79))
-d <- lapply(d, function(X) { rep(X, n.rep)})
-d$idx <- 1:length(d$OBS)
+  # Real data
+  n.rep <- 1
+  d <- list(
+    OBS = c(nc.sids$SID74, nc.sids$SID79),
+    NWPROP = c(nc.sids$NWPROP74, nc.sids$NWPROP79),
+    EXP = c(nc.sids$EXP74, nc.sids$EXP79)
+  )
+  d <- lapply(d, function(X) {
+    rep(X, n.rep)
+  })
+  d$idx <- 1:length(d$OBS)
 
-#Parameters of the Mmodel
-k <- 2
-alpha.min <- 0
-alpha.max <- 1
-
-
-
-model <- inla.rgeneric.define(inla.rgeneric.Mmodel.model, debug = TRUE,
-                              k = k, W = W, alpha.min = alpha.min,
-                              alpha.max = alpha.max)
-
-r.Mmodel <- inla(OBS ~ -1 + f(idx, model = model), data = d, E = EXP,
-  family = "poisson", control.predictor = list(compute = TRUE))
-
-nc.sids$Model1 <- r.Mmodel$summary.random$idx[1:100, "mean"]
-nc.sids$Model2 <- r.Mmodel$summary.random$idx[100 + 1:100, "mean"]
-
-spplot(nc.sids, c("Model1", "Model2"))
-
-nc.sids$Fit1 <- r.Mmodel$summary.fitted[1:100, "mean"]
-nc.sids$Fit2 <- r.Mmodel$summary.fitted[100 + 1:100, "mean"]
-
-spplot(nc.sids, c("Fit1", "SMR74", "Fit2", "SMR79"))
+  # Parameters of the Mmodel
+  k <- 2
+  alpha.min <- 0
+  alpha.max <- 1
 
 
-## Running UNIVARIATE MODEL
 
-#Real data
-n.rep <- 1
-d <- list(OBS = nc.sids$SID74,
-          NWPROP = nc.sids$NWPROP74,
-          EXP = nc.sids$EXP74)
-d <- lapply(d, function(X) { rep(X, n.rep)})
-d$idx <- 1:length(d$OBS)
+  model <- inla.rgeneric.define(inla.rgeneric.Mmodel.model,
+    debug = TRUE,
+    k = k, W = W, alpha.min = alpha.min,
+    alpha.max = alpha.max
+  )
 
-#Fit model
-r.uni <- inla(OBS ~ 1 + f(idx, model = "besag", graph = W), # + NWPROP,
-              data = d, E = EXP, family = "poisson",
-              control.predictor = list(compute = TRUE))
+  r.Mmodel <- inla(OBS ~ -1 + f(idx, model = model),
+    data = d, E = EXP,
+    family = "poisson", control.predictor = list(compute = TRUE)
+  )
 
-summary(r.uni)
+  nc.sids$Model1 <- r.Mmodel$summary.random$idx[1:100, "mean"]
+  nc.sids$Model2 <- r.Mmodel$summary.random$idx[100 + 1:100, "mean"]
 
-nc.sids$FITTED74.uni <- r.uni$summary.fitted.values[ , "mean"]
+  spplot(nc.sids, c("Model1", "Model2"))
 
-#Display univariate VS multivariate  fitted relative risks.
-dev.new()
-spplot(nc.sids, c("SMR74", "Fit1", "FITTED74.uni"))
-spplot(nc.sids, c("Fit1", "FITTED74.uni"),
-       main=list(label="Relative risk estimation",cex=2))
-dev.new()
-plot(nc.sids$FITTED74.uni, nc.sids$Fit1, main="Relative Risk estimations",
-     xlab="Univariate RR estimations"
-     , ylab="Multivariate RR estimations")#, xlim=c(0.5, 2.5), ylim=c(0, 2))
-abline(h=0, col="grey")
-abline(v=0, col="grey")
-abline(a=0, b=1, col="red")
+  nc.sids$Fit1 <- r.Mmodel$summary.fitted[1:100, "mean"]
+  nc.sids$Fit2 <- r.Mmodel$summary.fitted[100 + 1:100, "mean"]
 
+  spplot(nc.sids, c("Fit1", "SMR74", "Fit2", "SMR79"))
+
+
+  ## Running UNIVARIATE MODEL
+
+  # Real data
+  n.rep <- 1
+  d <- list(
+    OBS = nc.sids$SID74,
+    NWPROP = nc.sids$NWPROP74,
+    EXP = nc.sids$EXP74
+  )
+  d <- lapply(d, function(X) {
+    rep(X, n.rep)
+  })
+  d$idx <- 1:length(d$OBS)
+
+  # Fit model
+  r.uni <- inla(OBS ~ 1 + f(idx, model = "besag", graph = W), # + NWPROP,
+    data = d, E = EXP, family = "poisson",
+    control.predictor = list(compute = TRUE)
+  )
+
+  summary(r.uni)
+
+  nc.sids$FITTED74.uni <- r.uni$summary.fitted.values[, "mean"]
+
+  # Display univariate VS multivariate  fitted relative risks.
+  dev.new()
+  spplot(nc.sids, c("SMR74", "Fit1", "FITTED74.uni"))
+  spplot(nc.sids, c("Fit1", "FITTED74.uni"),
+    main = list(label = "Relative risk estimation", cex = 2)
+  )
+  dev.new()
+  plot(nc.sids$FITTED74.uni, nc.sids$Fit1,
+    main = "Relative Risk estimations",
+    xlab = "Univariate RR estimations",
+    ylab = "Multivariate RR estimations"
+  ) # , xlim=c(0.5, 2.5), ylim=c(0, 2))
+  abline(h = 0, col = "grey")
+  abline(v = 0, col = "grey")
+  abline(a = 0, b = 1, col = "red")
 }
 }
 
