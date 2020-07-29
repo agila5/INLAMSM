@@ -28,7 +28,7 @@
 #'
 #'   \item \emph{k} Number of diseases of the multivariate study.
 #'
-#'}
+#' }
 #'
 #' This model is defined using the 'f()' function and an index in order to
 #' identify the spatial areas. See the example.
@@ -42,134 +42,152 @@
 #'
 #' \donttest{
 #' if (require("INLA", quietly = TRUE)) {
-#' require(spdep)
-#' require(spData)
-#' require(rgdal)
+#'   require(spdep)
+#'   require(spData)
+#'   require(rgdal)
 #'
-#'## Independent IMCAR model with 2 diseases
+#'   ## Independent IMCAR model with 2 diseases
 #'
-#'#Load SIDS data
-#'nc.sids <- readOGR(system.file("shapes/sids.shp", package="spData")[1])
-#'proj4string(nc.sids) <- CRS("+proj=longlat +ellps=clrk66")
+#'   # Load SIDS data
+#'   nc.sids <- readOGR(system.file("shapes/sids.shp", package = "spData")[1])
+#'   proj4string(nc.sids) <- CRS("+proj=longlat +ellps=clrk66")
 #'
-#'#Compute adjacency matrix, as nb object 'adj' and sparse matrix 'W'
-#'adj <- poly2nb(nc.sids)
-#'W <- as(nb2mat(adj, style = "B"), "Matrix")
+#'   # Compute adjacency matrix, as nb object 'adj' and sparse matrix 'W'
+#'   adj <- poly2nb(nc.sids)
+#'   W <- as(nb2mat(adj, style = "B"), "Matrix")
 #'
-#'#Compute expected cases
-#'r74 <- sum(nc.sids$SID74) / sum(nc.sids$BIR74)
-#'nc.sids$EXP74 <- r74 * nc.sids$BIR74
-#'nc.sids$SMR74 <- nc.sids$SID74 / nc.sids$EXP74
-#'nc.sids$NWPROP74 <- nc.sids$NWBIR74 / nc.sids$BIR74
+#'   # Compute expected cases
+#'   r74 <- sum(nc.sids$SID74) / sum(nc.sids$BIR74)
+#'   nc.sids$EXP74 <- r74 * nc.sids$BIR74
+#'   nc.sids$SMR74 <- nc.sids$SID74 / nc.sids$EXP74
+#'   nc.sids$NWPROP74 <- nc.sids$NWBIR74 / nc.sids$BIR74
 #'
-#'r79 <- sum(nc.sids$SID79) / sum(nc.sids$BIR79)
-#'nc.sids$EXP79 <- r79 * nc.sids$BIR79
-#'nc.sids$SMR79 <- nc.sids$SID79 / nc.sids$EXP79
-#'nc.sids$NWPROP79 <- nc.sids$NWBIR79 / nc.sids$BIR79
+#'   r79 <- sum(nc.sids$SID79) / sum(nc.sids$BIR79)
+#'   nc.sids$EXP79 <- r79 * nc.sids$BIR79
+#'   nc.sids$SMR79 <- nc.sids$SID79 / nc.sids$EXP79
+#'   nc.sids$NWPROP79 <- nc.sids$NWBIR79 / nc.sids$BIR79
 #'
-#'# Data (replicated to assess scalability)
+#'   # Data (replicated to assess scalability)
 #'
-#'#Real data
-#'n.rep <- 1
-#'d <- list(OBS = c(nc.sids$SID74, nc.sids$SID79),
-#'          NWPROP = c(nc.sids$NWPROP74, nc.sids$NWPROP79),
-#'          EXP = c(nc.sids$EXP74, nc.sids$EXP79))
-#'d <- lapply(d, function(X) { rep(X, n.rep)})
-#'d$idx <- 1:length(d$OBS)
+#'   # Real data
+#'   n.rep <- 1
+#'   d <- list(
+#'     OBS = c(nc.sids$SID74, nc.sids$SID79),
+#'     NWPROP = c(nc.sids$NWPROP74, nc.sids$NWPROP79),
+#'     EXP = c(nc.sids$EXP74, nc.sids$EXP79)
+#'   )
+#'   d <- lapply(d, function(X) {
+#'     rep(X, n.rep)
+#'   })
+#'   d$idx <- 1:length(d$OBS)
 #'
-#'# Model parameters: k and W
-#'k <- 2 * n.rep #Number of diseases
+#'   # Model parameters: k and W
+#'   k <- 2 * n.rep # Number of diseases
 #'
-#'#Define independent IMCAR model
-#'model <- inla.rgeneric.define(inla.rgeneric.indep.IMCAR.model, debug = TRUE,
-#'                              k = k,
-#'                              W = W)
-#' 
-#' # Matrices for sum-to-zero constraints
-#' A <- kronecker(Diagonal(k, 1), Matrix(1, ncol = nrow(W), nrow = 1))
-#' e  = rep(0, k)
+#'   # Define independent IMCAR model
+#'   model <- inla.rgeneric.define(inla.rgeneric.indep.IMCAR.model,
+#'     debug = TRUE,
+#'     k = k,
+#'     W = W
+#'   )
 #'
-#'#Fit multivariate model
-#'r <- inla(OBS ~ 1 + f(idx, model = model,
-#'       extraconstr = list(A = as.matrix(A), e = e)), # + NWPROP,
-#'          data = d, E = EXP, family = "poisson",
-#'          control.predictor = list(compute = TRUE))
+#'   # Matrices for sum-to-zero constraints
+#'   A <- kronecker(Diagonal(k, 1), Matrix(1, ncol = nrow(W), nrow = 1))
+#'   e <- rep(0, k)
 #'
-#'summary(r)
+#'   # Fit multivariate model
+#'   r <- inla(OBS ~ 1 + f(idx,
+#'     model = model,
+#'     extraconstr = list(A = as.matrix(A), e = e)
+#'   ), # + NWPROP,
+#'   data = d, E = EXP, family = "poisson",
+#'   control.predictor = list(compute = TRUE)
+#'   )
 #'
-#' # Transformed parameters
-#' r.hyperpar <- inla.MCAR.transform(r, k = 2, model = "INDIMCAR")
-#' r.hyperpar$summary.hyperpar
+#'   summary(r)
 #'
-#'#Get fitted data, i.e., relative risk
-#'nc.sids$FITTED74 <- r$summary.fitted.values[1:100, "mean"]
-#'nc.sids$FITTED79 <- r$summary.fitted.values[100 + 1:100, "mean"]
+#'   # Transformed parameters
+#'   r.hyperpar <- inla.MCAR.transform(r, k = 2, model = "INDIMCAR")
+#'   r.hyperpar$summary.hyperpar
 #'
-#'#Display fitted relative risks
-#'dev.new()
-#'spplot(nc.sids, c("SMR74", "FITTED74", "SMR79", "FITTED79"))
+#'   # Get fitted data, i.e., relative risk
+#'   nc.sids$FITTED74 <- r$summary.fitted.values[1:100, "mean"]
+#'   nc.sids$FITTED79 <- r$summary.fitted.values[100 + 1:100, "mean"]
 #'
-#'#Show marginals of tau_1, tau_2, alpha
+#'   # Display fitted relative risks
+#'   dev.new()
+#'   spplot(nc.sids, c("SMR74", "FITTED74", "SMR79", "FITTED79"))
 #'
-#'marg.tau1 <- inla.tmarginal(
-#'  function(x) exp(x),
-#'  r$marginals.hyperpar[[1]])
+#'   # Show marginals of tau_1, tau_2, alpha
 #'
-#'marg.tau2 <- inla.tmarginal(
-#'  function(x) exp(x),
-#'  r$marginals.hyperpar[[2]])
+#'   marg.tau1 <- inla.tmarginal(
+#'     function(x) exp(x),
+#'     r$marginals.hyperpar[[1]]
+#'   )
 #'
-#'oldpar <- par(mfrow = c(2, 1))
-#'plot(marg.tau1, main = "tau1", type = "l")
-#'plot(marg.tau2, main = "tau2", type = "l")
+#'   marg.tau2 <- inla.tmarginal(
+#'     function(x) exp(x),
+#'     r$marginals.hyperpar[[2]]
+#'   )
 #'
-#'par(oldpar)
+#'   oldpar <- par(mfrow = c(2, 1))
+#'   plot(marg.tau1, main = "tau1", type = "l")
+#'   plot(marg.tau2, main = "tau2", type = "l")
 #'
-#'## Running UNIVARIATE MODEL
+#'   par(oldpar)
 #'
-#'#Real data
-#'d.uni <- list(OBS = nc.sids$SID74,
-#'              NWPROP = nc.sids$NWPROP74,
-#'              EXP = nc.sids$EXP74)
-#'d.uni$idx <- 1:length(d.uni$OBS)
+#'   ## Running UNIVARIATE MODEL
 #'
-#'#Fit model
-#'r.uni <- inla(OBS ~ 1 + f(idx, model = "besag", graph = W),
-#'              data = d.uni, E = EXP, family = "poisson",
-#'              control.predictor = list(compute = TRUE))
+#'   # Real data
+#'   d.uni <- list(
+#'     OBS = nc.sids$SID74,
+#'     NWPROP = nc.sids$NWPROP74,
+#'     EXP = nc.sids$EXP74
+#'   )
+#'   d.uni$idx <- 1:length(d.uni$OBS)
 #'
-#'summary(r.uni)
+#'   # Fit model
+#'   r.uni <- inla(OBS ~ 1 + f(idx, model = "besag", graph = W),
+#'     data = d.uni, E = EXP, family = "poisson",
+#'     control.predictor = list(compute = TRUE)
+#'   )
 #'
-#'nc.sids$FITTED74.uni <- r.uni$summary.fitted.values[ , "mean"]
+#'   summary(r.uni)
 #'
-#'#Display univariate VS multivariate fitted relative risks.
+#'   nc.sids$FITTED74.uni <- r.uni$summary.fitted.values[, "mean"]
 #'
-#'spplot(nc.sids, c("FITTED74", "FITTED74.uni"),
-#'       main=list(label="Relative risk estimation",cex=2))
+#'   # Display univariate VS multivariate fitted relative risks.
 #'
-#'plot(nc.sids$FITTED74.uni, nc.sids$FITTED74, main="Relative Risk estimations",
-#'     xlab="Univariate RR estimations"
-#'     , ylab="Multivariate RR estimations", xlim=c(0.5, 2.5), ylim=c(0.5, 2.5))
-#'abline(h=0, col="grey")
-#'abline(v=0, col="grey")
-#'abline(a=0, b=1, col="red")
+#'   spplot(nc.sids, c("FITTED74", "FITTED74.uni"),
+#'     main = list(label = "Relative risk estimation", cex = 2)
+#'   )
+#'
+#'   plot(nc.sids$FITTED74.uni, nc.sids$FITTED74,
+#'     main = "Relative Risk estimations",
+#'     xlab = "Univariate RR estimations",
+#'     ylab = "Multivariate RR estimations", xlim = c(0.5, 2.5), ylim = c(0.5, 2.5)
+#'   )
+#'   abline(h = 0, col = "grey")
+#'   abline(v = 0, col = "grey")
+#'   abline(a = 0, b = 1, col = "red")
 #'
 #'
-#'#Plot posterior mean of the spatial effects univ VS multi
+#'   # Plot posterior mean of the spatial effects univ VS multi
 #'
-#'nc.sids$m.uni <- r.uni$summary.random$idx[, "mean"]
-#'nc.sids$m.mult <- r$summary.random$idx[1:100, "mean"]
+#'   nc.sids$m.uni <- r.uni$summary.random$idx[, "mean"]
+#'   nc.sids$m.mult <- r$summary.random$idx[1:100, "mean"]
 #'
-#'plot(nc.sids$m.uni, nc.sids$m.mult,
-#'     main="Posterior mean of the spatial effect", xlab="Uni. post. means"
-#'     , ylab="Mult. post. means", xlim=c(-1,1), ylim=c(-1,1))
-#'abline(h=0, col="grey")
-#'abline(v=0, col="grey")
-#'abline(a=0, b=1, col="red")
+#'   plot(nc.sids$m.uni, nc.sids$m.mult,
+#'     main = "Posterior mean of the spatial effect", xlab = "Uni. post. means",
+#'     ylab = "Mult. post. means", xlim = c(-1, 1), ylim = c(-1, 1)
+#'   )
+#'   abline(h = 0, col = "grey")
+#'   abline(v = 0, col = "grey")
+#'   abline(a = 0, b = 1, col = "red")
 #'
-#'spplot(nc.sids, c("m.mult", "m.uni"),
-#'       main=list(label="Post. mean spatial effect",cex=2))
-#'
+#'   spplot(nc.sids, c("m.mult", "m.uni"),
+#'     main = list(label = "Post. mean spatial effect", cex = 2)
+#'   )
 #' }
 #' }
 #' @export
@@ -178,93 +196,93 @@
 # Define previous variables as global to avoid warnings()
 utils::globalVariables(c("k", "W"))
 
-'inla.rgeneric.indep.IMCAR.model' <-
-  function(cmd = c("graph", "Q", "mu", "initial", "log.norm.const",
-                   "log.prior", "quit"), theta = NULL)
-  {
+"inla.rgeneric.indep.IMCAR.model" <-
+  function(cmd = c(
+             "graph", "Q", "mu", "initial", "log.norm.const",
+             "log.prior", "quit"
+           ), theta = NULL) {
     ## IMCAR implementation MCAR(1, Lambda) = MCAR(Lambda)
     ## = Improper CAR + Diagonal Lambda
     ## k: number of diseases/blocks
     ## W: adjacency matrix
 
 
-    #theta: tau1, tau2, ...., tauk = k parameters.
-    interpret.theta = function()
-    {
-      #Function for changing from internal scale to external scale. Also,
-      #build the diagonal matrix used to model the between-disease variability.
+    # theta: tau1, tau2, ...., tauk = k parameters.
+    interpret.theta <- function() {
+      # Function for changing from internal scale to external scale. Also,
+      # build the diagonal matrix used to model the between-disease variability.
 
       # The k hyperparameters are the k precisions
-      param <- sapply(theta[as.integer(1:k)], function(x) { exp(x) })
+      param <- sapply(theta[as.integer(1:k)], function(x) {
+        exp(x)
+      })
 
       # Diagonal matrix for model the between-disease variability.
       PREC <- diag(param, k)
 
-      return (list(param = param, PREC = PREC))
+      return(list(param = param, PREC = PREC))
     }
 
 
-    #Graph of precision function; i.e., a 0/1 representation of precision matrix
-    graph = function()
-    {
+    # Graph of precision function; i.e., a 0/1 representation of precision matrix
+    graph <- function() {
       # Diagonal precision matrix
       PREC <- diag(1, k)
       G <- kronecker(PREC, Matrix::Diagonal(nrow(W), 1) + W)
-      return (G)
+      return(G)
     }
 
-    #Precision matrix
-    Q = function()
-    {
-      #Parameters in model scale
+    # Precision matrix
+    Q <- function() {
+      # Parameters in model scale
       param <- interpret.theta()
 
-      Q <- kronecker(param$PREC, Matrix::Diagonal(nrow(W), apply(W, 1, sum)) -  W)
+      Q <- kronecker(param$PREC, Matrix::Diagonal(nrow(W), apply(W, 1, sum)) - W)
 
-      return (Q)
+      return(Q)
     }
 
-    #Mean of model
-    mu = function() {
+    # Mean of model
+    mu <- function() {
       return(numeric(0))
     }
 
-    log.norm.const = function() {
+    log.norm.const <- function() {
       ## return the log(normalising constant) for the model
-      #param = interpret.theta()
+      # param = interpret.theta()
       #
-      #val = n * (- 0.5 * log(2*pi) + 0.5 * log(prec.innovation))
+      # val = n * (- 0.5 * log(2*pi) + 0.5 * log(prec.innovation))
       #+ 0.5 * log(1.0 - param$alpha^2)
 
       val <- numeric(0)
-      return (val)
+      return(val)
     }
 
-    log.prior = function() {
+    log.prior <- function() {
       ## return the log-prior for the hyperparameters.
       ## Uniform prior in (alpha.min, alpha.max) on model scale
-      param = interpret.theta()
+      param <- interpret.theta()
 
-     #Uniform priors on the standard deviations
-     # log(constant_uniform) is ignored
-      val <- - sum(theta) / 2 - k * log(2)
+      # Uniform priors on the standard deviations
+      # log(constant_uniform) is ignored
+      val <- -sum(theta) / 2 - k * log(2)
 
-      return (val)
+      return(val)
     }
 
-    initial = function() {
+    initial <- function() {
       ## return initial values
 
       # Initial values
-      return( c(rep(log(1), k)) )
+      return(c(rep(log(1), k)))
     }
 
-    quit = function() {
-      return (invisible())
+    quit <- function() {
+      return(invisible())
     }
 
-    val = do.call(match.arg(cmd), args = list())
-    return (val)
+    val <- do.call(match.arg(cmd), args = list())
+    return(val)
   }
 
 
