@@ -135,27 +135,17 @@
     val <- 0
     for (j in 1:k) {
       val <- val - theta[j] - 2 * log(1 + exp(-theta[j]))
-      print(val)
     }
-    
-    print(theta)
-    print(param$param)
 
     # Whishart prior for joint matrix of hyperparameters
-    print("dwish")
     val <- val + log(MCMCpack::dwish(W = param$PREC, v = k, S = diag(rep(1, k))))
-    print(val)
     # This is for precisions
-    print("precisions")
     val <- val + sum(theta[(k + 1):(2 * k)])
-    print(val)
     # This is for correlation terms
-    print("Correlations")
     val <- val + sum(
       log(2) + theta[(2 * k + 1):(k * (k + 3) / 2)] - 
       2 * log(1 + exp(theta[(2 * k + 1):(k * (k + 3) / 2)]))
       )
-    print(val)
     
     return(val)
   }
