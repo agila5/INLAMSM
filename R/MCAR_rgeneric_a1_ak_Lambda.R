@@ -5,7 +5,7 @@
 #'
 #' @examples
 #' 1 + 1
-"inla.rgeneric.MCAR.model_v2" <- function(
+"inla.rgeneric.MCAR.model_a1_ak_Lambda" <- function(
   cmd = c(
     "graph", "Q", "mu", "initial", "log.norm.const", "log.prior", "quit"
   ), 
@@ -172,6 +172,6 @@
 #'
 #' @examples
 #' 1 + 1
-inla.MCAR.model_v2 <- function(...) {
-  INLA::inla.rgeneric.define(model = inla.rgeneric.MCAR.model_v2, ...)
+MCAR.model_a1_ak_Lambda <- function(...) {
+  INLA::inla.rgeneric.define(model = inla.rgeneric.MCAR.model_a1_ak_Lambda, ...)
 }
