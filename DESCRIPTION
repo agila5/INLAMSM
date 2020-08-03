@@ -42,3 +42,5 @@ Suggests:
     rgdal,
     sp
 Additional_repositories: https://inla.r-inla-download.org/R/stable
+Imports: 
+    stats

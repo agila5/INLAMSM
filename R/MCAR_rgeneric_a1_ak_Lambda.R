@@ -1,10 +1,3 @@
-#' A
-#'
-#' @return B
-#' @export
-#'
-#' @examples
-#' 1 + 1
 "inla.rgeneric.MCAR.model_a1_ak_Lambda" <- function(
   cmd = c(
     "graph", "Q", "mu", "initial", "log.norm.const", "log.prior", "quit"
@@ -27,7 +20,7 @@
     # First k parameters are the autocorrelation parameters
     alpha <- vapply(
       theta[1:k], 
-      function(x) alpha.min + (alpha.max - alpha.min) * plogis(x), 
+      function(x) alpha.min + (alpha.max - alpha.min) * stats::plogis(x), 
       numeric(1)
     )
     # The next k parameters are the marginal precisions 
@@ -39,7 +32,7 @@
     # the last (k * (k - 1)) / 2 are the correlation parameters ordered by columns.
     corre <- vapply(
       theta[(2 * k + 1):(k * (k + 3) / 2)], 
-      function(x) 2 * plogis(x) - 1, 
+      function(x) 2 * stats::plogis(x) - 1, 
       numeric(1)
     )
 
@@ -93,9 +86,6 @@
   }
   
   Q <- function() {
-    # I have a lot of operations on matrices
-    require(Matrix)
-    
     # Parameters in model scale
     param <- interpret.theta()
     
@@ -167,6 +157,7 @@
 
 #' A
 #'
+#' @param ... ABC
 #' @return B
 #' @export
 #'
