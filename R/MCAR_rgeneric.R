@@ -296,12 +296,13 @@ utils::globalVariables(c("k", "W", "alpha.min", "alpha.max"))
     }
     
     log.prior = function() {
+      browser()
       ## return the log-prior for the hyperparameters.
       ## Uniform prior in (alpha.min, alpha.max) on model scale
       param = interpret.theta()
       
       # log-Prior for the autocorrelation parameter
-      val = -theta[1L] - 2 * log(1 + exp(-theta[1L]))
+      val = - theta[1L] - 2 * log(1 + exp(-theta[1L]))
       
       # Whishart prior for joint matrix of hyperparameters
       val = val + 
@@ -310,9 +311,9 @@ utils::globalVariables(c("k", "W", "alpha.min", "alpha.max"))
         sum(log(2) + theta[-as.integer(1:(k + 1))] - 2 * log(1 + exp(theta[-as.integer(1:(k + 1))]))) # This is for correlation terms
       
       
-      # + sum(theta[as.integer(2:(k + 1))]) + log(param$param[as.integer(-(1:(k + 1)))])
-      # 
-      return(val)
+      + sum(theta[as.integer(2:(k+1))]) + log(param$param[as.integer(-(1:(k+1)))])
+      
+      return (val)
     }
     
     initial = function() {

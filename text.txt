@@ -1,0 +1,325 @@
+Reading layer `sids' from data source `C:\Users\Utente\Documents\R\win-library\3.6\spData\shapes\sids.shp' using driver `ESRI Shapefile'
+Simple feature collection with 100 features and 22 fields
+geometry type:  MULTIPOLYGON
+dimension:      XY
+bbox:           xmin: -84.32385 ymin: 33.88199 xmax: -75.45698 ymax: 36.58965
+CRS:            NA
+
+	hgid: d51af4939124  date: Mon Mar 09 11:55:59 2020 +0300
+Report bugs to <help@r-inla.org>
+Process file[C:\Users\Utente\AppData\Local\Temp\RtmpiKsO4J\file312857246b11/Model.ini] threads[4] blas_threads[1]
+inla_build...
+	number of sections=[9]
+	parse section=[0] name=[INLA.libR] type=[LIBR]
+	inla_parse_libR...
+		section[INLA.libR]
+			R_HOME=[C:/PROGRA~1/R/R-36~1.3]
+	parse section=[8] name=[INLA.Expert] type=[EXPERT]
+	inla_parse_expert...
+		section[INLA.Expert]
+			disable.gaussian.check=[0]
+			cpo.manual=[0]
+			jp.file=[(null)]
+			jp.model=[(null)]
+	parse section=[1] name=[INLA.Model] type=[PROBLEM]
+	inla_parse_problem...
+		name=[INLA.Model]
+		R-INLA tag=[Version_20.03.09]
+		Build tag=[Version_20.03.09]
+		openmp.strategy=[default]
+		pardiso-library installed and working? = [no]
+		smtp = [taucs]
+		strategy = [default]
+	store results in directory=[C:\Users\Utente\AppData\Local\Temp\RtmpiKsO4J\file312857246b11/results.files]
+		output:
+			cpo=[0]
+			po=[1]
+			dic=[1]
+			kld=[1]
+			mlik=[1]
+			q=[0]
+			graph=[0]
+			gdensity=[0]
+			hyperparameters=[1]
+			summary=[1]
+			return.marginals=[1]
+			nquantiles=[3]  [ 0.025 0.5 0.975 ]
+			ncdf=[0]  [ ]
+	parse section=[3] name=[Predictor] type=[PREDICTOR]
+	inla_parse_predictor ...
+		section=[Predictor]
+		dir=[predictor]
+		PRIOR->name=[loggamma]
+		hyperid=[53001|Predictor]
+		PRIOR->from_theta=[function (x) <<NEWLINE>>exp(x)]
+		PRIOR->to_theta = [function (x) <<NEWLINE>>log(x)]
+		PRIOR->PARAMETERS=[1, 1e-005]
+		initialise log_precision[12]
+		fixed=[1]
+		user.scale=[1]
+		n=[200]
+		m=[0]
+		ndata=[200]
+		compute=[1]
+		read offsets from file=[C:/Users/Utente/AppData/Local/Temp/RtmpiKsO4J/file312857246b11/data.files/file31281094dee]
+		read n=[400] entries from file=[C:/Users/Utente/AppData/Local/Temp/RtmpiKsO4J/file312857246b11/data.files/file31281094dee]
+		file=[C:/Users/Utente/AppData/Local/Temp/RtmpiKsO4J/file312857246b11/data.files/file31281094dee] 0/200  (idx,y) = (0, 0)
+		file=[C:/Users/Utente/AppData/Local/Temp/RtmpiKsO4J/file312857246b11/data.files/file31281094dee] 1/200  (idx,y) = (1, 0)
+		file=[C:/Users/Utente/AppData/Local/Temp/RtmpiKsO4J/file312857246b11/data.files/file31281094dee] 2/200  (idx,y) = (2, 0)
+		file=[C:/Users/Utente/AppData/Local/Temp/RtmpiKsO4J/file312857246b11/data.files/file31281094dee] 3/200  (idx,y) = (3, 0)
+		file=[C:/Users/Utente/AppData/Local/Temp/RtmpiKsO4J/file312857246b11/data.files/file31281094dee] 4/200  (idx,y) = (4, 0)
+		file=[C:/Users/Utente/AppData/Local/Temp/RtmpiKsO4J/file312857246b11/data.files/file31281094dee] 5/200  (idx,y) = (5, 0)
+		file=[C:/Users/Utente/AppData/Local/Temp/RtmpiKsO4J/file312857246b11/data.files/file31281094dee] 6/200  (idx,y) = (6, 0)
+		file=[C:/Users/Utente/AppData/Local/Temp/RtmpiKsO4J/file312857246b11/data.files/file31281094dee] 7/200  (idx,y) = (7, 0)
+		file=[C:/Users/Utente/AppData/Local/Temp/RtmpiKsO4J/file312857246b11/data.files/file31281094dee] 8/200  (idx,y) = (8, 0)
+		file=[C:/Users/Utente/AppData/Local/Temp/RtmpiKsO4J/file312857246b11/data.files/file31281094dee] 9/200  (idx,y) = (9, 0)
+		Aext=[(null)]
+		AextPrecision=[1e+008]
+		output:
+			summary=[1]
+			return.marginals=[1]
+			nquantiles=[3]  [ 0.025 0.5 0.975 ]
+			ncdf=[0]  [ ]
+	parse section=[2] name=[INLA.Data1] type=[DATA]
+	inla_parse_data [section 1]...
+		tag=[INLA.Data1]
+		family=[POISSON]
+		likelihood=[POISSON]
+		file->name=[C:/Users/Utente/AppData/Local/Temp/RtmpiKsO4J/file312857246b11/data.files/file31281a148f5]
+		file->name=[C:/Users/Utente/AppData/Local/Temp/RtmpiKsO4J/file312857246b11/data.files/file312853c918f5]
+		file->name=[C:/Users/Utente/AppData/Local/Temp/RtmpiKsO4J/file312857246b11/data.files/file31289355259]
+		read n=[600] entries from file=[C:/Users/Utente/AppData/Local/Temp/RtmpiKsO4J/file312857246b11/data.files/file31281a148f5]
+		mdata.nattributes = 0
+			0/200  (idx,a,y,d) = (0, 2.2054, 1, 1)
+			1/200  (idx,a,y,d) = (1, 0.984444, 0, 1)
+			2/200  (idx,a,y,d) = (2, 6.44437, 5, 1)
+			3/200  (idx,a,y,d) = (3, 1.02689, 1, 1)
+			4/200  (idx,a,y,d) = (4, 2.87247, 9, 1)
+			5/200  (idx,a,y,d) = (5, 2.93514, 7, 1)
+			6/200  (idx,a,y,d) = (6, 0.578133, 0, 1)
+			7/200  (idx,a,y,d) = (7, 0.849007, 0, 1)
+			8/200  (idx,a,y,d) = (8, 1.95676, 4, 1)
+			9/200  (idx,a,y,d) = (9, 3.25857, 1, 1)
+		likelihood.variant=[0]
+		Link model   [LOG]
+		Link order   [-1]
+		Link variant [-1]
+		Link ntheta  [0]
+		mix.use[0]
+	parse section=[6] name=[idx] type=[FFIELD]
+	inla_parse_ffield...
+		section=[idx]
+		dir=[random.effect00000001]
+		model=[rgeneric]
+		correct=[-1]
+		constr=[0]
+		diagonal=[0]
+		id.names=<not present>
+		compute=[1]
+		nrep=[1]
+		ngroup=[1]
+		read covariates from file=[C:/Users/Utente/AppData/Local/Temp/RtmpiKsO4J/file312857246b11/data.files/file31285f9620ce]
+		read n=[400] entries from file=[C:/Users/Utente/AppData/Local/Temp/RtmpiKsO4J/file312857246b11/data.files/file31285f9620ce]
+		file=[C:/Users/Utente/AppData/Local/Temp/RtmpiKsO4J/file312857246b11/data.files/file31285f9620ce] 0/200  (idx,y) = (0, 0)
+		file=[C:/Users/Utente/AppData/Local/Temp/RtmpiKsO4J/file312857246b11/data.files/file31285f9620ce] 1/200  (idx,y) = (1, 1)
+		file=[C:/Users/Utente/AppData/Local/Temp/RtmpiKsO4J/file312857246b11/data.files/file31285f9620ce] 2/200  (idx,y) = (2, 2)
+		file=[C:/Users/Utente/AppData/Local/Temp/RtmpiKsO4J/file312857246b11/data.files/file31285f9620ce] 3/200  (idx,y) = (3, 3)
+		file=[C:/Users/Utente/AppData/Local/Temp/RtmpiKsO4J/file312857246b11/data.files/file31285f9620ce] 4/200  (idx,y) = (4, 4)
+		file=[C:/Users/Utente/AppData/Local/Temp/RtmpiKsO4J/file312857246b11/data.files/file31285f9620ce] 5/200  (idx,y) = (5, 5)
+		file=[C:/Users/Utente/AppData/Local/Temp/RtmpiKsO4J/file312857246b11/data.files/file31285f9620ce] 6/200  (idx,y) = (6, 6)
+		file=[C:/Users/Utente/AppData/Local/Temp/RtmpiKsO4J/file312857246b11/data.files/file31285f9620ce] 7/200  (idx,y) = (7, 7)
+		file=[C:/Users/Utente/AppData/Local/Temp/RtmpiKsO4J/file312857246b11/data.files/file31285f9620ce] 8/200  (idx,y) = (8, 8)
+		file=[C:/Users/Utente/AppData/Local/Temp/RtmpiKsO4J/file312857246b11/data.files/file31285f9620ce] 9/200  (idx,y) = (9, 9)
+		file for locations=[C:/Users/Utente/AppData/Local/Temp/RtmpiKsO4J/file312857246b11/data.files/file3128a591aca]
+			nlocations=[200]
+			locations[0]=[1]
+			locations[1]=[2]
+			locations[2]=[3]
+			locations[3]=[4]
+			locations[4]=[5]
+			locations[5]=[6]
+			locations[6]=[7]
+			locations[7]=[8]
+			locations[8]=[9]
+			locations[9]=[10]
+		cyclic=[0]
+		rgeneric.file   [C:/Users/Utente/AppData/Local/Temp/RtmpiKsO4J/file312857246b11/data.files/file31285f5b2a44]
+		rgeneric.model  [.inla.rgeneric.model.idx]
+Warning message:
+package 'methods' was built under R version 3.6.3 
+During startup - Warning messages:
+1: package 'datasets' was built under R version 3.6.3 
+2: package 'utils' was built under R version 3.6.3 
+3: package 'grDevices' was built under R version 3.6.3 
+4: package 'graphics' was built under R version 3.6.3 
+5: package 'stats' was built under R version 3.6.3 
+Loading required package: Matrix
+Loading required package: sp
+Loading required package: parallel
+Loading required package: foreach
+This is INLA_20.03.09 built 2020-03-09 09:12:35 UTC.
+See www.r-inla.org/contact-us for how to get help.
+		ntheta = [6]
+		initial[0] = 0
+		initial[1] = 0
+		initial[2] = -0.146835
+		initial[3] = 0
+		initial[4] = 0
+		initial[5] = 0
+		initialise theta[0]=[0]
+		fixed[0]=[0]
+		initialise theta[1]=[0]
+		fixed[1]=[0]
+		initialise theta[2]=[-0.146835]
+		fixed[2]=[0]
+		initialise theta[3]=[0]
+		fixed[3]=[0]
+		initialise theta[4]=[0]
+		fixed[4]=[0]
+		initialise theta[5]=[0]
+		fixed[5]=[0]
+		computed/guessed rank-deficiency = [0]
+		output:
+			summary=[1]
+			return.marginals=[1]
+			nquantiles=[3]  [ 0.025 0.5 0.975 ]
+			ncdf=[0]  [ ]
+	section=[4] name=[PERIOD74] type=[LINEAR]
+	inla_parse_linear...
+		section[PERIOD74]
+		dir=[fixed.effect00000001]
+		file for covariates=[C:/Users/Utente/AppData/Local/Temp/RtmpiKsO4J/file312857246b11/data.files/file312843576c53]
+		read n=[400] entries from file=[C:/Users/Utente/AppData/Local/Temp/RtmpiKsO4J/file312857246b11/data.files/file312843576c53]
+		file=[C:/Users/Utente/AppData/Local/Temp/RtmpiKsO4J/file312857246b11/data.files/file312843576c53] 0/200  (idx,y) = (0, 1)
+		file=[C:/Users/Utente/AppData/Local/Temp/RtmpiKsO4J/file312857246b11/data.files/file312843576c53] 1/200  (idx,y) = (1, 1)
+		file=[C:/Users/Utente/AppData/Local/Temp/RtmpiKsO4J/file312857246b11/data.files/file312843576c53] 2/200  (idx,y) = (2, 1)
+		file=[C:/Users/Utente/AppData/Local/Temp/RtmpiKsO4J/file312857246b11/data.files/file312843576c53] 3/200  (idx,y) = (3, 1)
+		file=[C:/Users/Utente/AppData/Local/Temp/RtmpiKsO4J/file312857246b11/data.files/file312843576c53] 4/200  (idx,y) = (4, 1)
+		file=[C:/Users/Utente/AppData/Local/Temp/RtmpiKsO4J/file312857246b11/data.files/file312843576c53] 5/200  (idx,y) = (5, 1)
+		file=[C:/Users/Utente/AppData/Local/Temp/RtmpiKsO4J/file312857246b11/data.files/file312843576c53] 6/200  (idx,y) = (6, 1)
+		file=[C:/Users/Utente/AppData/Local/Temp/RtmpiKsO4J/file312857246b11/data.files/file312843576c53] 7/200  (idx,y) = (7, 1)
+		file=[C:/Users/Utente/AppData/Local/Temp/RtmpiKsO4J/file312857246b11/data.files/file312843576c53] 8/200  (idx,y) = (8, 1)
+		file=[C:/Users/Utente/AppData/Local/Temp/RtmpiKsO4J/file312857246b11/data.files/file312843576c53] 9/200  (idx,y) = (9, 1)
+		prior mean=[0]
+		prior precision=[0.001]
+		compute=[1]
+		output:
+			summary=[1]
+			return.marginals=[1]
+			nquantiles=[3]  [ 0.025 0.5 0.975 ]
+			ncdf=[0]  [ ]
+	section=[5] name=[PERIOD79] type=[LINEAR]
+	inla_parse_linear...
+		section[PERIOD79]
+		dir=[fixed.effect00000002]
+		file for covariates=[C:/Users/Utente/AppData/Local/Temp/RtmpiKsO4J/file312857246b11/data.files/file312823323f94]
+		read n=[400] entries from file=[C:/Users/Utente/AppData/Local/Temp/RtmpiKsO4J/file312857246b11/data.files/file312823323f94]
+		file=[C:/Users/Utente/AppData/Local/Temp/RtmpiKsO4J/file312857246b11/data.files/file312823323f94] 0/200  (idx,y) = (0, 0)
+		file=[C:/Users/Utente/AppData/Local/Temp/RtmpiKsO4J/file312857246b11/data.files/file312823323f94] 1/200  (idx,y) = (1, 0)
+		file=[C:/Users/Utente/AppData/Local/Temp/RtmpiKsO4J/file312857246b11/data.files/file312823323f94] 2/200  (idx,y) = (2, 0)
+		file=[C:/Users/Utente/AppData/Local/Temp/RtmpiKsO4J/file312857246b11/data.files/file312823323f94] 3/200  (idx,y) = (3, 0)
+		file=[C:/Users/Utente/AppData/Local/Temp/RtmpiKsO4J/file312857246b11/data.files/file312823323f94] 4/200  (idx,y) = (4, 0)
+		file=[C:/Users/Utente/AppData/Local/Temp/RtmpiKsO4J/file312857246b11/data.files/file312823323f94] 5/200  (idx,y) = (5, 0)
+		file=[C:/Users/Utente/AppData/Local/Temp/RtmpiKsO4J/file312857246b11/data.files/file312823323f94] 6/200  (idx,y) = (6, 0)
+		file=[C:/Users/Utente/AppData/Local/Temp/RtmpiKsO4J/file312857246b11/data.files/file312823323f94] 7/200  (idx,y) = (7, 0)
+		file=[C:/Users/Utente/AppData/Local/Temp/RtmpiKsO4J/file312857246b11/data.files/file312823323f94] 8/200  (idx,y) = (8, 0)
+		file=[C:/Users/Utente/AppData/Local/Temp/RtmpiKsO4J/file312857246b11/data.files/file312823323f94] 9/200  (idx,y) = (9, 0)
+		prior mean=[0]
+		prior precision=[0.001]
+		compute=[1]
+		output:
+			summary=[1]
+			return.marginals=[1]
+			nquantiles=[3]  [ 0.025 0.5 0.975 ]
+			ncdf=[0]  [ ]
+	Index table: number of entries[4], total length[402]
+		tag                            start-index     length
+		Predictor                               0        200
+		idx                                   200        200
+		PERIOD74                              400          1
+		PERIOD79                              401          1
+	parse section=[7] name=[INLA.Parameters] type=[INLA]
+	inla_parse_INLA...
+		section[INLA.Parameters]
+			lincomb.derived.only = [Yes]
+			lincomb.derived.correlation.matrix = [No]
+		global_node.factor = 2.000
+		global_node.degree = 2147483647
+		reordering = -1
+Contents of ai_param 000000000663B910
+	Optimiser: DEFAULT METHOD
+		Option for GSL-BFGS2: tol  = 0.1
+		Option for GSL-BFGS2: step_size = 1
+		Option for GSL-BFGS2: epsx = 0.005
+		Option for GSL-BFGS2: epsf = 0.000353553
+		Option for GSL-BFGS2: epsg = 0.005
+		Restart: 0
+		Mode known: No
+	Gaussian approximation:
+		tolerance_func = 0.0005
+		tolerance_step = 0.0005
+		optpar_fp = 0
+		optpar_nr_step_factor = -0.1
+	Gaussian data: No
+	Strategy: 	Use a mean-skew corrected Gaussian by fitting a Skew-Normal
+	Fast mode: 	On
+	Use linear approximation to log(|Q +c|)? Yes
+		Method:	 Compute the derivative exact
+	Parameters for improved approximations
+		Number of points evaluate:	 9
+		Step length to compute derivatives numerically:	 0.000100002
+		Stencil to compute derivatives numerically:	 5
+		Cutoff value to construct local neigborhood:	 0.0001
+	Log calculations:	 On
+	Log calculated marginal for the hyperparameters:	 On
+	Integration strategy:	 Automatic (GRID for dim(theta)=1 and 2 and otherwise CCD)
+		f0 (CCD only):	 1.100000
+		dz (GRID only):	 0.750000
+		Adjust weights (GRID only):	 On
+		Difference in log-density limit (GRID only):	 6.000000
+		Skip configurations with (presumed) small density (GRID only):	 On
+	Gradient is computed using Central difference with step-length 0.010000
+	Hessian is computed using Central difference with step-length 0.100000
+	Hessian matrix is forced to be a diagonal matrix? [No]
+	Compute effective number of parameters? [Yes]
+	Perform a Monte Carlo error-test? [No]
+	Interpolator [Auto]
+	CPO required diff in log-density [3]
+	Stupid search mode:
+		Status     [On]
+		Max iter   [1000]
+		Factor     [1.05]
+	Numerical integration of hyperparameters:
+		Maximum number of function evaluations [100000]
+		Relative error ....................... [1e-005]
+		Absolute error ....................... [1e-006]
+	To stabilise the numerical optimisation:
+		Minimum value of the -Hessian [-1.#INF]
+		Strategy for the linear term [Keep]
+	CPO manual calculation[No]
+	Laplace-correction is Disabled.
+
+inla_build: check for unused entries in[C:\Users\Utente\AppData\Local\Temp\RtmpiKsO4J\file312857246b11/Model.ini]
+inla_INLA...
+	Strategy = [DEFAULT]
+	Sparse-matrix library... = [taucs]
+	OpenMP strategy......... = [small]
+	Density-strategy........ = [High]
+	Size of graph........... = [402]
+	Number of constraints... = [0]
+	Found optimal reordering=[amdc] nnz(L)=[1816] and use_global_nodes(user)=[no]
+	List of hyperparameters: 
+		theta[0] = [Theta1 for idx]
+		theta[1] = [Theta2 for idx]
+		theta[2] = [Theta3 for idx]
+		theta[3] = [Theta4 for idx]
+		theta[4] = [Theta5 for idx]
+		theta[5] = [Theta6 for idx]
+Optimise using DEFAULT METHOD
+Error in matrix(W) : 'data' must be of a vector type, was 'NULL'
+In addition: Warning messages:
+1: package 'INLA' was built under R version 3.6.3 
+2: package 'Matrix' was built under R version 3.6.3 
+3: package 'sp' was built under R version 3.6.3 
+4: package 'parallel' was built under R version 3.6.3 
+5: package 'foreach' was built under R version 3.6.3 
