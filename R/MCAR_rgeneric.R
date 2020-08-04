@@ -296,7 +296,6 @@ utils::globalVariables(c("k", "W", "alpha.min", "alpha.max"))
     }
     
     log.prior = function() {
-      browser()
       ## return the log-prior for the hyperparameters.
       ## Uniform prior in (alpha.min, alpha.max) on model scale
       param = interpret.theta()
