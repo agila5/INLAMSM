@@ -180,7 +180,7 @@ inla.rgeneric.MCAR.model_case3 <- function(
     }
     
     # Whishart prior for joint matrix of hyperparameters
-    val <- val + log(MCMCpack::dwish(W = param$PREC, v = 2, S = diag(rep(1, 2))))
+    val <- val + log(MCMCpack::dwish(W = param$PREC, v = 2, S = diag(rep(0.1, 2))))
     # This is for precisions
     val <- val + sum(theta[4:5])
     # This is for correlation terms
