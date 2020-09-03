@@ -128,7 +128,7 @@
     }
 
     # Whishart prior for joint matrix of hyperparameters
-    val <- val + log(MCMCpack::dwish(W = param$PREC, v = k, S = diag(rep(1, k))))
+    val <- val + log(MCMCpack::dwish(W = param$PREC, v = k, S = diag(rep(lambda_wish, k))))
     # This is for precisions
     val <- val + sum(theta[(k + 1):(2 * k)])
     # This is for correlation terms
@@ -164,5 +164,5 @@
 #' @examples
 #' 1 + 1
 MCAR.model_a1_ak_Lambda <- function(...) {
-  INLA::inla.rgeneric.define(model = inla.rgeneric.MCAR.model_a1_ak_Lambda, ...)
+  INLA::inla.rgeneric.define(model = inla.rgeneric.MCAR.model_a1_ak_Lambda, lambda_wish = 1, ...)
 }
